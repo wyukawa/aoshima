@@ -31,7 +31,7 @@ public class RootController {
     private CaffeineCacheManager caffeineCacheManager;
 
     @RequestMapping(value = "/clear_cache", method = RequestMethod.GET)
-    public ResponseEntity<?> cacheClear() {
+    public ResponseEntity<?> clearCache() {
 
         Collection<String> cacheNames = caffeineCacheManager.getCacheNames();
         for (String cacheName : cacheNames) {
