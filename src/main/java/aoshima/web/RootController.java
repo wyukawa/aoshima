@@ -1,8 +1,7 @@
 package aoshima.web;
 
-import aoshima.model.*;
+import aoshima.model.PrestoQueryResult;
 import com.facebook.presto.client.*;
-import com.facebook.presto.client.Column;
 import io.airlift.http.client.HttpClientConfig;
 import io.airlift.http.client.jetty.JettyHttpClient;
 import io.airlift.json.JsonCodec;
@@ -15,9 +14,9 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -64,8 +63,8 @@ public class RootController {
     }
 
     @Cacheable("query_result")
-    @RequestMapping(value = "/query", method = RequestMethod.POST)
-    public ResponseEntity<?> getPrestoQueryResult(@RequestParam("query") String query) {
+    @RequestMapping(value = "/v1/statement", method = RequestMethod.POST)
+    public ResponseEntity<?> getPrestoQueryResult(@RequestBody String query) {
         logger.info("presto query = " + query);
 
         try (StatementClient client = getStatementClient(query)) {
