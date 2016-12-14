@@ -62,6 +62,23 @@ public class RootController {
         return ResponseEntity.ok(cacheNames);
     }
 
+    @RequestMapping(value = "/list_cache", method = RequestMethod.GET)
+    public ResponseEntity<?> listCache() {
+
+        List<String> cacheList = new ArrayList<>();
+        Collection<String> cacheNames = caffeineCacheManager.getCacheNames();
+        for (String cacheName : cacheNames) {
+            Cache cache = caffeineCacheManager.getCache(cacheName);
+            com.github.benmanes.caffeine.cache.Cache<Object, Object> nativeCache = (com.github.benmanes.caffeine.cache.Cache<Object, Object>)cache.getNativeCache();
+            Set<Object> objectSet = nativeCache.asMap().keySet();
+            for(Object o : objectSet) {
+                cacheList.add(o.toString());
+            }
+        }
+
+        return ResponseEntity.ok(cacheList);
+    }
+
     @Cacheable("query_result")
     @RequestMapping(value = "/v1/statement", method = RequestMethod.POST)
     public ResponseEntity<?> getPrestoQueryResult(@RequestBody String query) {
