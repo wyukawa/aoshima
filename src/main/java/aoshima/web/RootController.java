@@ -14,10 +14,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.*;
@@ -50,8 +47,8 @@ public class RootController {
         httpClient = new JettyHttpClient(new HttpClientConfig().setConnectTimeout(new Duration(10, TimeUnit.SECONDS)));
     }
 
-    @RequestMapping(value = "/clear_cache", method = RequestMethod.GET)
-    public ResponseEntity<?> clearCache() {
+    @RequestMapping(value = "/clear_all_cache", method = RequestMethod.GET)
+    public ResponseEntity<?> clearAllCache() {
 
         Collection<String> cacheNames = caffeineCacheManager.getCacheNames();
         for (String cacheName : cacheNames) {
@@ -77,6 +74,12 @@ public class RootController {
         }
 
         return ResponseEntity.ok(cacheList);
+    }
+
+    @RequestMapping(value = "/clear_cache", method = RequestMethod.POST)
+    public ResponseEntity<?> clearCache(@RequestBody String key) {
+        caffeineCacheManager.getCache("query_result").evict(key);
+        return ResponseEntity.ok(new ArrayList<String>().add(key));
     }
 
     @Cacheable("query_result")

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>aoshima</title>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"></link>
+    <script src="webjars/jquery/3.1.1-1/jquery.min.js"></script>
+    <script>
+
+        function clear_cache(event) {
+            $.ajax({
+                type : 'post',
+                url  : '/clear_cache',
+                data: event.data.query,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function(data) {
+                    load();
+                },
+                error: function(e) {
+                    console.log(e);
+
+                },
+                complete: function() {
+                    console.log("complete");
+                }
+            });
+        }
+
+        function load() {
+            var listCacheHandler = function (rows) {
+                $("#cache-list").empty();
+                for (var i = 0; i < rows.length; i++) {
+                    var tr = document.createElement("tr");
+                    var td = document.createElement("td");
+                    $(td).text(rows[i]);
+                    $(tr).append(td);
+
+                    var td = document.createElement("td");
+                    var button = document.createElement("button");
+                    $(button).attr("type", "button");
+                    $(button).attr("class", "btn btn-success");
+                    $(button).text("clear cache");
+                    $(button).click({query: rows[i]}, clear_cache);
+                    $(td).append(button);
+                    $(tr).append(td);
+                    $("#cache-list").append(tr);
+                }
+            };
+            $.get("/list_cache", null, listCacheHandler, "json");
+        }
+
+        function clear_all_cache() {
+            var clearAllCacheHandler = function (data) {
+                console.log(data);
+                $("#cache-list").empty();
+            };
+            $.get("/clear_all_cache", null, clearAllCacheHandler, "json");
+        }
+
+
+    </script>
+</head>
+
+<body onLoad="load()">
+
+    <div class="container">
+        <h4>clear all cache</h4>
+        <button type="button" onclick="clear_all_cache()" class="btn btn-success">clear all cache</button>
+
+        <h4>cache list</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>presto query</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="cache-list"></tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
