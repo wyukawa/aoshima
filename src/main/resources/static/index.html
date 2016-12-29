@@ -18,7 +18,6 @@
                 },
                 error: function(e) {
                     console.log(e);
-
                 },
                 complete: function() {
                     console.log("complete");
@@ -35,9 +34,9 @@
                 dataType: 'json',
                 success: function(data) {
                     //window.alert(JSON.stringify(data));
-                    var blob = new Blob([JSON.stringify(data)], {type: 'text/plain'})
-                    var link = document.createElement('a')
-                    link.href = URL.createObjectURL(blob)
+                    var blob = new Blob([JSON.stringify(data)], {type: 'text/plain'});
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
                     link.download = 'cache.json';
                     link.click();
                 },
@@ -94,7 +93,6 @@
                 },
                 error: function(e) {
                     console.log(e);
-
                 },
                 complete: function() {
                     console.log("complete");
