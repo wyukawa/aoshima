@@ -82,6 +82,18 @@ public class RootController {
         return ResponseEntity.ok(Arrays.asList(key));
     }
 
+    @RequestMapping(value = "/get_cache", method = RequestMethod.POST)
+    public ResponseEntity<?> getCache(@RequestBody String query) {
+        Collection<String> cacheNames = caffeineCacheManager.getCacheNames();
+        for (String cacheName : cacheNames) {
+            Cache cache = caffeineCacheManager.getCache(cacheName);
+            Cache.ValueWrapper valueWrapper = cache.get(query);
+            Object result = valueWrapper.get();
+            return ResponseEntity.ok(Arrays.asList(result));
+        }
+        return ResponseEntity.ok(Collections.emptyList());
+    }
+
     @Cacheable(value = "query_result", condition = "#query.indexOf(\"information_schema\") == -1")
     @RequestMapping(value = "/v1/statement", method = RequestMethod.POST)
     public ResponseEntity<?> getPrestoQueryResult(@RequestBody String query) {

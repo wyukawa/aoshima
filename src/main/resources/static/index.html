@@ -26,6 +26,31 @@
             });
         }
 
+        function get_cache(event) {
+            $.ajax({
+                type : 'post',
+                url  : '/get_cache',
+                data: event.data.query,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function(data) {
+                    //window.alert(JSON.stringify(data));
+                    var blob = new Blob([JSON.stringify(data)], {type: 'text/plain'})
+                    var link = document.createElement('a')
+                    link.href = URL.createObjectURL(blob)
+                    link.download = 'cache.json';
+                    link.click();
+                },
+                error: function(e) {
+                    console.log(e);
+                },
+                complete: function() {
+                    console.log("complete");
+                }
+            });
+
+        }
+
         function load() {
             var listCacheHandler = function (rows) {
                 $("#cache-list").empty();
@@ -33,6 +58,15 @@
                     var tr = document.createElement("tr");
                     var td = document.createElement("td");
                     $(td).text(rows[i]);
+                    $(tr).append(td);
+
+                    var td = document.createElement("td");
+                    var button = document.createElement("button");
+                    $(button).attr("type", "button");
+                    $(button).attr("class", "btn btn-default");
+                    $(button).text("get cache");
+                    $(button).click({query: rows[i]}, get_cache);
+                    $(td).append(button);
                     $(tr).append(td);
 
                     var td = document.createElement("td");
@@ -83,6 +117,7 @@
             <thead>
                 <tr>
                     <th>presto query</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
