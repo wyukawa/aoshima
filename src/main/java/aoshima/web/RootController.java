@@ -82,7 +82,7 @@ public class RootController {
         return ResponseEntity.ok(new ArrayList<String>().add(key));
     }
 
-    @Cacheable("query_result")
+    @Cacheable(value = "query_result", condition = "#query.indexOf(\"information_schema\") == -1")
     @RequestMapping(value = "/v1/statement", method = RequestMethod.POST)
     public ResponseEntity<?> getPrestoQueryResult(@RequestBody String query) {
         logger.info("presto query = " + query);
