@@ -25,7 +25,7 @@
             });
         }
 
-        function get_cache(event) {
+        function download_cache(event) {
             $.ajax({
                 type : 'post',
                 url  : '/get_cache',
@@ -63,8 +63,8 @@
                     var button = document.createElement("button");
                     $(button).attr("type", "button");
                     $(button).attr("class", "btn btn-default");
-                    $(button).text("get cache");
-                    $(button).click({query: rows[i]}, get_cache);
+                    $(button).text("download cache");
+                    $(button).click({query: rows[i]}, download_cache);
                     $(td).append(button);
                     $(tr).append(td);
 
