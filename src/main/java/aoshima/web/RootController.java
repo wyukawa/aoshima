@@ -47,7 +47,7 @@ public class RootController {
         httpClient = new JettyHttpClient(new HttpClientConfig().setConnectTimeout(new Duration(10, TimeUnit.SECONDS)));
     }
 
-    @RequestMapping(value = "/clear_all_cache", method = RequestMethod.GET)
+    @RequestMapping(value = "/clear_all_cache", method = RequestMethod.DELETE)
     public ResponseEntity<?> clearAllCache() {
 
         Collection<String> cacheNames = caffeineCacheManager.getCacheNames();
@@ -76,10 +76,10 @@ public class RootController {
         return ResponseEntity.ok(cacheList);
     }
 
-    @RequestMapping(value = "/clear_cache", method = RequestMethod.POST)
+    @RequestMapping(value = "/clear_cache", method = RequestMethod.DELETE)
     public ResponseEntity<?> clearCache(@RequestBody String key) {
         caffeineCacheManager.getCache("query_result").evict(key);
-        return ResponseEntity.ok(new ArrayList<String>().add(key));
+        return ResponseEntity.ok(Arrays.asList(key));
     }
 
     @Cacheable(value = "query_result", condition = "#query.indexOf(\"information_schema\") == -1")

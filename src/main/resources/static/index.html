@@ -8,7 +8,7 @@
 
         function clear_cache(event) {
             $.ajax({
-                type : 'post',
+                type : 'delete',
                 url  : '/clear_cache',
                 data: event.data.query,
                 contentType: 'application/json',
@@ -50,11 +50,22 @@
         }
 
         function clear_all_cache() {
-            var clearAllCacheHandler = function (data) {
-                console.log(data);
-                $("#cache-list").empty();
-            };
-            $.get("/clear_all_cache", null, clearAllCacheHandler, "json");
+            $.ajax({
+                type : 'delete',
+                url  : '/clear_all_cache',
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function(data) {
+                    $("#cache-list").empty();
+                },
+                error: function(e) {
+                    console.log(e);
+
+                },
+                complete: function() {
+                    console.log("complete");
+                }
+            });
         }
 
 
