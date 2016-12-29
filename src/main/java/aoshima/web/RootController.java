@@ -49,19 +49,16 @@ public class RootController {
 
     @RequestMapping(value = "/clear_all_cache", method = RequestMethod.DELETE)
     public ResponseEntity<?> clearAllCache() {
-
         Collection<String> cacheNames = caffeineCacheManager.getCacheNames();
         for (String cacheName : cacheNames) {
             Cache cache = caffeineCacheManager.getCache(cacheName);
             cache.clear();
         }
-
         return ResponseEntity.ok(cacheNames);
     }
 
     @RequestMapping(value = "/list_cache", method = RequestMethod.GET)
     public ResponseEntity<?> listCache() {
-
         List<String> cacheList = new ArrayList<>();
         Collection<String> cacheNames = caffeineCacheManager.getCacheNames();
         for (String cacheName : cacheNames) {
@@ -72,7 +69,6 @@ public class RootController {
                 cacheList.add(o.toString());
             }
         }
-
         return ResponseEntity.ok(cacheList);
     }
 
