@@ -32,6 +32,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-cache')
     compile 'com.github.ben-manes.caffeine:caffeine:2.3.5'
     compile 'com.facebook.presto:presto-client:0.160'
+    compile 'com.facebook.presto:presto-parser:0.160'
     compile 'io.airlift:http-client:0.139'
     compile 'io.airlift:json:0.139'
     compile 'org.webjars:jquery:3.1.1-1'
