@@ -107,6 +107,7 @@ public class RootController {
                     throw new RuntimeException(format("Query %s has no columns\n", results.getId()));
                 } else {
                     PrestoQueryResult prestoQueryResult = new PrestoQueryResult();
+                    prestoQueryResult.setId(queryId);
                     List<aoshima.model.Column> aoshimaColumns = new ArrayList<>();
                     List<Column> columns = results.getColumns();
                     for(Column column : columns) {
