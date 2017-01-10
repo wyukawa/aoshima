@@ -111,6 +111,17 @@
         <button type="button" onclick="clear_all_cache()" class="btn btn-success">clear all cache</button>
 
         <h4>cache list</h4>
+        <div>query:<input type="text" size="20" id="search_cache"></div>
+        <script>
+            $('#search_cache').keyup(function(){
+                if ($(this).val()) {
+                    $('#cache-list tr').hide();
+                    $('#cache-list tr td:nth-child(1):contains(' + this.value + ')').parent().show();
+                } else {
+                    $('#cache-list tr').show();
+                }
+            });
+        </script>
         <table class="table">
             <thead>
                 <tr>
