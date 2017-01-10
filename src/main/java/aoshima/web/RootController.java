@@ -130,6 +130,8 @@ public class RootController {
                     }
 
                     prestoQueryResult.setData(data);
+                    prestoQueryResult.setInfoUri(results.getInfoUri());
+                    prestoQueryResult.setStats(results.getStats());
 
                     return ResponseEntity.ok(prestoQueryResult);
 
