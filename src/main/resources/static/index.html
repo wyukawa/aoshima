@@ -56,7 +56,7 @@
                 for (var i = 0; i < rows.length; i++) {
                     var tr = document.createElement("tr");
                     var td = document.createElement("td");
-                    $(td).text(rows[i]);
+                    $(td).html('<p>' + rows[i].replace(/\r?\n/g, "<br />") + '</p>');
                     $(tr).append(td);
 
                     var td = document.createElement("td");
