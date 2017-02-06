@@ -160,7 +160,7 @@ public class RootController {
         JsonCodec<QueryResults> jsonCodec = jsonCodec(QueryResults.class);
 
         ClientSession clientSession = new ClientSession(
-                URI.create(prestoCoordinatorServer), "aoshima", "aoshima", catalog,
+                URI.create(prestoCoordinatorServer), "aoshima", "aoshima", null, catalog,
                 schema, TimeZone.getDefault().getID(), Locale.getDefault(),
                 new HashMap<String, String>(), null, false, new Duration(2, MINUTES));
         return new StatementClient(httpClient, jsonCodec, clientSession, query);
