@@ -25,7 +25,7 @@
             });
         }
 
-        function download_cache(event) {
+        function download_json(event) {
             $.ajax({
                 type : 'post',
                 url  : '/get_cache',
@@ -33,11 +33,53 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function(data) {
-                    //window.alert(JSON.stringify(data));
+                    var queryId = data[0].body.id;
                     var blob = new Blob([JSON.stringify(data)], {type: 'text/plain'});
                     var link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = 'cache.json';
+                    link.download = queryId + '.json';
+                    link.click();
+                },
+                error: function(e) {
+                    console.log(e);
+                },
+                complete: function() {
+                    console.log("complete");
+                }
+            });
+
+        }
+
+        function download_tsv(event) {
+            $.ajax({
+                type : 'post',
+                url  : '/get_cache',
+                data: event.data.query,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function(data) {
+                    var queryId = data[0].body.id;
+                    var columns = data[0].body.columns;
+                    var rows = data[0].body.data;
+                    var str = '';
+                    for (var i = 0; i < columns.length; i++) {
+                        if(i != columns.length - 1) {
+                            str += columns[i].name + '\t';
+                        } else {
+                            str += columns[i].name + '\n';
+                        }
+                    }
+                    for (var i = 0; i < rows.length; i++) {
+                        if(i != rows.length - 1) {
+                            str += rows[i].join('\t') + '\n';
+                        } else {
+                            str += rows[i].join('\t');
+                        }
+                    }
+                    var blob = new Blob([str], {type: 'text/plain'});
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = queryId + '.tsv';
                     link.click();
                 },
                 error: function(e) {
@@ -63,8 +105,17 @@
                     var button = document.createElement("button");
                     $(button).attr("type", "button");
                     $(button).attr("class", "btn btn-default");
-                    $(button).text("download cache");
-                    $(button).click({query: rows[i]}, download_cache);
+                    $(button).text("download json");
+                    $(button).click({query: rows[i]}, download_json);
+                    $(td).append(button);
+                    $(tr).append(td);
+
+                    var td = document.createElement("td");
+                    var button = document.createElement("button");
+                    $(button).attr("type", "button");
+                    $(button).attr("class", "btn btn-default");
+                    $(button).text("download tsv");
+                    $(button).click({query: rows[i]}, download_tsv);
                     $(td).append(button);
                     $(tr).append(td);
 
@@ -126,6 +177,7 @@
             <thead>
                 <tr>
                     <th>presto query</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>

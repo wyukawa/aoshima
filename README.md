@@ -14,6 +14,7 @@ cd aoshima
 ```
 java -jar build/libs/aoshima-0.0.1-SNAPSHOT.jar
 ```
+open http://localhost:8080/
 
 ## Execution example
 ```
