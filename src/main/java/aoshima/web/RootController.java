@@ -90,7 +90,7 @@ public class RootController {
         return ResponseEntity.ok(Collections.emptyList());
     }
 
-    @Cacheable(value = "query_result", condition = "#query.indexOf(\"information_schema\") == -1", keyGenerator = "queryKeyGenerator")
+    @Cacheable(value = "query_result", condition = "#query.equals(\"select table_schema, table_name, column_name, is_nullable, data_type from information_schema.columns\")", keyGenerator = "queryKeyGenerator")
     @RequestMapping(value = "/v1/statement", method = RequestMethod.POST)
     public ResponseEntity<?> getPrestoQueryResult(@RequestBody String query) {
         logger.info("presto query = " + query);
