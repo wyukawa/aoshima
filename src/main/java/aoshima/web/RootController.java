@@ -38,11 +38,11 @@ public class RootController {
     @Value("${schema}")
     private String schema;
 
-    @Value("${user}")
-    private String user;
+    @Value("${presto.user}")
+    private String prestoUser;
 
-    @Value("${source}")
-    private String source;
+    @Value("${presto.source}")
+    private String prestoSource;
 
     private JettyHttpClient httpClient;
 
@@ -166,7 +166,7 @@ public class RootController {
         JsonCodec<QueryResults> jsonCodec = jsonCodec(QueryResults.class);
 
         ClientSession clientSession = new ClientSession(
-                URI.create(prestoCoordinatorServer), user, source, null, catalog,
+                URI.create(prestoCoordinatorServer), prestoUser, prestoSource, null, catalog,
                 schema, TimeZone.getDefault().getID(), Locale.getDefault(),
                 new HashMap<String, String>(), null, false, new Duration(2, MINUTES));
         return new StatementClient(httpClient, jsonCodec, clientSession, query);
