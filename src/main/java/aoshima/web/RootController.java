@@ -20,6 +20,8 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static com.facebook.presto.client.PrestoHeaders.PRESTO_SOURCE;
+import static com.facebook.presto.client.PrestoHeaders.PRESTO_USER;
 import static io.airlift.json.JsonCodec.jsonCodec;
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -37,12 +39,6 @@ public class RootController {
 
     @Value("${schema}")
     private String schema;
-
-    @Value("${presto.user}")
-    private String prestoUser;
-
-    @Value("${presto.source}")
-    private String prestoSource;
 
     private JettyHttpClient httpClient;
 
@@ -98,10 +94,10 @@ public class RootController {
 
     @Cacheable(value = "query_result", condition = "#query.equals(\"select table_schema, table_name, column_name, is_nullable, data_type from information_schema.columns\")", keyGenerator = "queryKeyGenerator")
     @RequestMapping(value = "/v1/statement", method = RequestMethod.POST)
-    public ResponseEntity<?> getPrestoQueryResult(@RequestBody String query) {
+    public ResponseEntity<?> getPrestoQueryResult(@RequestBody String query, @RequestHeader(value=PRESTO_USER, required=false) String prestoUser, @RequestHeader(value=PRESTO_SOURCE, required=false) String prestoSource) {
         logger.info("presto query = " + query);
 
-        try (StatementClient client = getStatementClient(query)) {
+        try (StatementClient client = getStatementClient(query, prestoUser, prestoSource)) {
             while (client.isValid() && (client.current().getData() == null)) {
                 client.advance();
             }
@@ -160,7 +156,7 @@ public class RootController {
 
     }
 
-    private StatementClient getStatementClient(String query) {
+    private StatementClient getStatementClient(String query, String prestoUser, String prestoSource) {
 
 
         JsonCodec<QueryResults> jsonCodec = jsonCodec(QueryResults.class);

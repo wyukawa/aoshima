@@ -15,7 +15,7 @@ public class QueryKeyGenerator implements KeyGenerator {
     @Override
     public Object generate(Object target, Method method, Object... params) {
 
-        if (params.length == 1) {
+        if (params.length == 3) {
             if (params[0] instanceof String) {
                 String query = (String) params[0];
 
