@@ -1,5 +1,6 @@
 package aoshima.web;
 
+import aoshima.key.QueryKeyGenerator;
 import aoshima.model.PrestoQueryResult;
 import com.facebook.presto.client.*;
 import io.airlift.http.client.HttpClientConfig;
@@ -74,7 +75,8 @@ public class RootController {
 
     @RequestMapping(value = "/clear_cache", method = RequestMethod.DELETE)
     public ResponseEntity<?> clearCache(@RequestBody String key) {
-        caffeineCacheManager.getCache("query_result").evict(key);
+        String formattedKey = String.valueOf(new QueryKeyGenerator().generate(null, null, key));
+        caffeineCacheManager.getCache("query_result").evict(formattedKey);
         return ResponseEntity.ok(Arrays.asList(key));
     }
 
